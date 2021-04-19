@@ -30,13 +30,26 @@
 npm i nestjs-auth0-oidc express-openid-connect
 ```
 
+Notice that `express-openid-connect` is a peer dependency
+
 ## Fully Working Example
 [See the fully working end-to-end examples of NestJS and Auth0 Open ID Connect](https://github.com/pact-foundation/pact-js/tree/master/examples)
 
 ## What is this package?
 
+**At September 17, 2020, Auth0 announced the release of new SDK,** `express-opennid-connect`,
+which is _"a new Node.js SDK that makes it super easy to add OpenID Connect authentication to your Express apps"_, [Here is a link to the official announcement](https://auth0.com/blog/auth0-s-express-openid-connect-sdk/)
+
 This package enables you to use `express-openid-connect` (hands: 'oidc') in your NestJS application. \
-It supports the auth0 oidc middleware and suggest a built in use of required scopes.
+It supports the Auth0 OpenID Connect middleware and suggests a built in use of required scopes.
+
+
+#### What’s Going to Happen to `passport-auth0`?
+According to Auth0, nothing is going to happen with it. But they DO recommend to use
+`express-openid-connect` if you are creating a new project, from Auth0 official announcement:
+
+**_We recommend considering using `express-openid-connect`, as it will be our target for all innovation for web sign-in on the Node.js platform for the foreseeable future._**
+
 
 ## License
 

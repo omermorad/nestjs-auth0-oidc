@@ -32,8 +32,12 @@ const PORT = process.env.PROVIDER_PORT || 3001;
 const OIDCProvider = new Provider(`http://localhost:${PORT}`, config);
 
 // Monkey patch the provider to allow localhost and http redirect uris
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 const { invalidate: orig } = OIDCProvider.Client.Schema.prototype;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 OIDCProvider.Client.Schema.prototype.invalidate = function invalidate(message, code) {
   if (code === 'implicit-force-https' || code === 'implicit-forbid-localhost') {
     return;

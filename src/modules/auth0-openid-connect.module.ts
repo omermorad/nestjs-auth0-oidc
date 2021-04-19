@@ -20,4 +20,10 @@ export class Auth0OpenidConnectModule {
       imports: [Auth0OpenIdConnectCoreModule.registerAsync(options)],
     };
   }
+
+  public static forFeature(options: Auth0OpenIdConnectOptions) {
+    return {
+      module: Auth0OpenidConnectModule,
+    };
+  }
 }

@@ -1,7 +1,7 @@
-process.env.ALLOWED_AUDIENCES = 'https://api.example.com/products';
-
 import express from 'express';
 import { auth, requiredScopes } from 'express-oauth2-bearer';
+
+process.env.ALLOWED_AUDIENCES = 'https://api.example.com/products';
 
 const ProductsApiApp = express();
 ProductsApiApp.use(auth());
