@@ -1,0 +1,63 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  main:
+    name: Release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Lint Commit Message
+        run: |
+          npm i -D @commitlint/config-conventional
+          echo $(git log -1 --pretty=format:"%s") | npx commitlint
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Create .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            registry=https://registry.npmjs.org/
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+            FirstName LastName (omer.moradd@gmail.com, omer.moradd@gmail.com)=true
+            email=omer.moradd@gmail.com
+            always-auth=true
+            package-lock=true
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run NPN CI
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:ci
+        env:
+          JEST_JUNIT_OUTPUT_DIR: ./coverage
+
+      - name: Release
+        id: changesets
+        uses: changesets/action@master
+        with:
+          publish: npm run release
+          commit: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
