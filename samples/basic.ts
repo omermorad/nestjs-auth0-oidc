@@ -1,9 +1,7 @@
 import { Controller, Get, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { Auth0OpenidConnectModule } from 'src/modules/auth0-openid-connect.module';
-import { Auth0OidcAuthMiddleware } from 'src/middleware/auth0-oidc-auth.middleware';
-import { InjectOidcCtx } from 'src/common/oidc-ctx.decorator';
 import { RequestContext } from 'express-openid-connect';
 import { NestFactory } from '@nestjs/core';
+import { InjectOidcCtx, Auth0OpenidConnectModule, Auth0OidcAuthMiddleware } from '../src';
 
 @Controller('/')
 class SomeController {

@@ -1,12 +1,8 @@
-import { Controller, Get, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { Auth0OpenidConnectModule } from 'src/modules/auth0-openid-connect.module';
-import { Auth0OidcAuthMiddleware } from 'src/middleware/auth0-oidc-auth.middleware';
 import { RequestContext } from 'express-openid-connect';
+import { Controller, Get, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
-import { HttpModule } from '@nestjs/common/http/http.module';
-import { Scope } from '@nestjs/common/interfaces/scope-options.interface';
-import { HttpService } from '@nestjs/common/http/http.service';
+import { HttpService, Injectable, HttpModule, Scope } from '@nestjs/common';
+import { Auth0OpenidConnectModule, Auth0OidcAuthMiddleware } from '../src';
 
 const { API_PORT = 3002 } = process.env;
 

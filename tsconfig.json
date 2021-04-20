@@ -24,10 +24,7 @@
       "es6"
     ],
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-
-    }
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "index.ts",

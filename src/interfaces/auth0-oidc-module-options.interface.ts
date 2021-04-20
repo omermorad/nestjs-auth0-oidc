@@ -1,18 +1,26 @@
 import { ConfigParams } from 'express-openid-connect';
 import { ModuleMetadata, Type } from '@nestjs/common';
 
-export type Auth0ConfigMandatory = 'baseURL' | 'clientID' | 'issuerBaseURL' | 'secret';
-export type Auth0OidcConfig = ConfigParams;
-export type Auth0OidcBaseOptions = Required<Pick<Auth0OidcConfig, Auth0ConfigMandatory>>;
-export type Auth0OidcOptions = Omit<Auth0OidcConfig, Auth0ConfigMandatory>;
+type Auth0ConfigMandatory = 'baseURL' | 'clientID' | 'issuerBaseURL' | 'secret';
+type Auth0OidcConfig = ConfigParams;
 
-export interface Auth0OpenIdConnectOptionsFactory {
-  createAuth0OpenIdConnectOptions(): Promise<Auth0OidcOptions> | Auth0OidcOptions;
-}
-
-export interface OpenIdConnectModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+interface OIDCModuleAsyncOptions<TOptionsFactory, TOptions> extends Pick<ModuleMetadata, 'imports'> {
   inject?: any[];
-  useClass?: Type<Auth0OpenIdConnectOptionsFactory>;
-  useExisting?: Type<Auth0OpenIdConnectOptionsFactory>;
-  useFactory?: (...args: any[]) => Promise<Auth0OidcOptions> | Auth0OidcOptions;
+  useClass?: Type<TOptionsFactory>;
+  useExisting?: Type<TOptionsFactory>;
+  useFactory?: (...args: any[]) => Promise<TOptions> | TOptions;
 }
+
+export type Auth0OidcBaseOptions = Required<Pick<Auth0OidcConfig, Auth0ConfigMandatory>>;
+export type Auth0OidcAuthOptions = Omit<Auth0OidcConfig, Auth0ConfigMandatory>;
+
+export interface OIDCMandatoryOptionsFactory {
+  createOidcMandatoryOptions(): Promise<Auth0OidcAuthOptions> | Auth0OidcAuthOptions;
+}
+
+export interface OIDCAuthOptionsFactory {
+  createOidcAuthOptions(): Promise<Auth0OidcAuthOptions> | Auth0OidcAuthOptions;
+}
+
+export type OIDCModuleAsyncBaseOptions = OIDCModuleAsyncOptions<OIDCAuthOptionsFactory, Auth0OidcBaseOptions>;
+export type OIDCModuleAsyncAuthOptions = OIDCModuleAsyncOptions<OIDCMandatoryOptionsFactory, Auth0OidcAuthOptions>;
