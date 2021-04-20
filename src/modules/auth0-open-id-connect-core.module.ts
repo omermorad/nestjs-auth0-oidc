@@ -1,38 +1,31 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import {
-  PactConsumerModuleAsyncOptions,
-  PactConsumerOptionsFactory,
-  PactConsumerOverallOptions,
-} from '../interfaces/pact-consumer-module-options.interface';
-import { PactProvider } from '../providers/pact.provider';
-import { PactFactory } from '../services/pact-factory.service';
-import { PactModuleProviders } from '../common/pact-module-providers.enum';
-import { ProviderFactory } from '../common/provider-factory';
-import { PactPublisherProvider } from '../providers/pact-publisher.provider';
+  Auth0OidcBaseOptions,
+  OpenIdConnectModuleAsyncOptions,
+  Auth0OpenIdConnectOptionsFactory,
+} from '../interfaces/auth0-oidc-module-options.interface';
+import { OidcRequestContextProvider } from '../providers/oidc-request-context.provider';
 
 @Module({})
 export class Auth0OpenIdConnectCoreModule {
-  public static register(options: PactConsumerOverallOptions): DynamicModule {
-    const consumerOptProvider = ProviderFactory.create(PactModuleProviders.ConsumerOptions, options.consumer);
-    const publisherOptProvider = ProviderFactory.create(PactModuleProviders.PublicationOptions, options.publication);
-
+  public static register(options: Auth0OidcBaseOptions): DynamicModule {
     return {
       module: Auth0OpenIdConnectCoreModule,
-      exports: [PactFactory, PactPublisherProvider],
-      providers: [consumerOptProvider, publisherOptProvider, PactProvider, PactPublisherProvider, PactFactory],
+      exports: [],
+      providers: [OidcRequestContextProvider],
     };
   }
 
-  public static registerAsync(options: PactConsumerModuleAsyncOptions): DynamicModule {
+  public static registerAsync(options: OpenIdConnectModuleAsyncOptions): DynamicModule {
     return {
       module: Auth0OpenIdConnectCoreModule,
-      exports: [PactFactory, PactPublisherProvider],
+      exports: [],
       imports: options.imports,
-      providers: [...this.createAsyncProviders(options), PactProvider, PactPublisherProvider, PactFactory],
+      providers: [...this.createAsyncProviders(options)],
     };
   }
 
-  private static createAsyncProviders(options: PactConsumerModuleAsyncOptions): Provider[] {
+  private static createAsyncProviders(options: OpenIdConnectModuleAsyncOptions): Provider[] {
     if (options.useExisting || options.useFactory) {
       return this.createAsyncOptionsProviders(options);
     }
@@ -70,13 +63,13 @@ export class Auth0OpenIdConnectCoreModule {
       ];
     }
 
-    const inject = [(options.useClass || options.useExisting) as Type<PactConsumerOverallOptions>];
+    const inject = [(options.useClass || options.useExisting) as Type<Auth0OpenIdConnectOptions>];
 
     return [
       {
         provide: PactModuleProviders.ConsumerOptions,
-        useFactory: async (optionsFactory: PactConsumerOptionsFactory) => {
-          const { consumer } = await optionsFactory.createPactConsumerOptions();
+        useFactory: async (optionsFactory: Auth0OpenIdConnectOptionsFactory) => {
+          const { consumer } = await optionsFactory.createAuth0OpenIdConnectOptions();
 
           return consumer;
         },
@@ -84,8 +77,8 @@ export class Auth0OpenIdConnectCoreModule {
       },
       {
         provide: PactModuleProviders.PublicationOptions,
-        useFactory: async (optionsFactory: PactConsumerOptionsFactory) => {
-          const { publication } = await optionsFactory.createPactConsumerOptions();
+        useFactory: async (optionsFactory: Auth0OpenIdConnectOptionsFactory) => {
+          const { publication } = await optionsFactory.createAuth0OpenIdConnectOptions();
 
           return publication;
         },

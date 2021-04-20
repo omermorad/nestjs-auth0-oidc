@@ -1,5 +1,5 @@
 import { HttpService, Injectable, Scope } from '@nestjs/common';
-import { InjectOidcCtx } from 'src/common/oidc-body.decorator';
+import { InjectOidcCtx } from 'src/common/oidc-ctx.decorator';
 import { RequestContext } from 'express-openid-connect';
 
 @Injectable({

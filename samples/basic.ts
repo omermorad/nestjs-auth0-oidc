@@ -11,8 +11,6 @@ class SomeController {
 
   @Get('/')
   public sayHello() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
     return `hello ${this.oidc.user.sub}`;
   }
 }
@@ -31,8 +29,23 @@ class FeatureModule implements NestModule {
   }
 }
 
+/*
+ * You can use the `register` method if you want to add the basic required fields
+ * of Auth0 SDK NOT from the environment variables
+ * If you'll leave this one empty, it will automatically try to pull this fields
+ * from the environment variables, read the documentation for more details:
+ * https://github.com/auth0/express-openid-connect#documentation
+ */
 @Module({
-  imports: [Auth0OpenidConnectModule, FeatureModule],
+  imports: [
+    Auth0OpenidConnectModule.register({
+      baseURL: '',
+      secret: '',
+      issuerBaseURL: '',
+      clientID: '',
+    }),
+    FeatureModule,
+  ],
 })
 class MainAppModule {}
 

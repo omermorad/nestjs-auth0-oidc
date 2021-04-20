@@ -33,9 +33,9 @@ class SomeController {
   }
 }
 
-@Module({
-  imports: [
-    Auth0OpenidConnectModule.forFeature({
+class Auth0ConfigOptions {
+  createSomething() {
+    return {
       idpLogout: true,
       authRequired: false,
       routes: {
@@ -45,6 +45,14 @@ class SomeController {
         // path after login, this should be registered on your authorization server.
         postLogoutRedirect: '/custom-logout',
       },
+    };
+  }
+}
+
+@Module({
+  imports: [
+    Auth0OpenidConnectModule.forFeatureAsync({
+      useClass: Auth0ConfigOptions,
     }),
   ],
   providers: [SomeController],

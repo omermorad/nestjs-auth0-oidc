@@ -6,12 +6,12 @@ import { Request } from 'express';
 
 export function RequiresAuth(requiresLoginCheck?: (req: OpenidRequest) => boolean) {
   class RequiresAuthGuard implements CanActivate {
-    public canActivate(context: ExecutionContext): boolean {
+    public canActivate(context: ExecutionContext) {
       const req = context.switchToHttp().getRequest();
       const res = context.switchToHttp().getRequest();
       const next = context.switchToHttp().getNext()();
 
-      return requiresAuth(requiresLoginCheck)(req, res, next);
+      requiresAuth(requiresLoginCheck)(req, res, next);
     }
   }
 
