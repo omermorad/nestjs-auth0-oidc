@@ -16,6 +16,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "types": [
+      "globals",
       "node",
       "jest"
     ],

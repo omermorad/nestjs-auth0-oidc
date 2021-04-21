@@ -1,4 +1,4 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, Global, Module, Provider, Type } from '@nestjs/common';
 import {
   Auth0OidcBaseOptions,
   OIDCMandatoryOptionsFactory,
@@ -6,16 +6,18 @@ import {
 } from '../interfaces/auth0-oidc-module-options.interface';
 
 @Module({})
+@Global()
 export class OpenIdConnectCoreRootModule {
   public static register(options: Auth0OidcBaseOptions): DynamicModule {
+    const provider = {
+      provide: 'OIDC_BASE_OPTIONS',
+      useValue: options,
+    };
+
     return {
       module: OpenIdConnectCoreRootModule,
-      providers: [
-        {
-          provide: 'OIDC_BASE_OPTIONS',
-          useValue: options,
-        },
-      ],
+      providers: [provider],
+      exports: [provider],
     };
   }
 

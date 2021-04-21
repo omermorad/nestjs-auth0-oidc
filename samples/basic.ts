@@ -19,11 +19,11 @@ class SomeController {
       idpLogout: true,
     }),
   ],
-  providers: [SomeController],
+  controllers: [SomeController],
 })
 class FeatureModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Auth0OidcAuthMiddleware).forRoutes('*');
+    consumer.apply(Auth0OidcAuthMiddleware).exclude('login', 'logout').forRoutes('*');
   }
 }
 
@@ -36,17 +36,18 @@ class FeatureModule implements NestModule {
  */
 @Module({
   imports: [
-    Auth0OpenidConnectModule.register({
-      baseURL: '',
-      secret: '',
-      issuerBaseURL: '',
-      clientID: '',
-    }),
+    // Auth0OpenidConnectModule.register({
+    //   baseURL: '',
+    //   secret: '',
+    //   issuerBaseURL: '',
+    //   clientID: '',
+    // }),
+    Auth0OpenidConnectModule,
     FeatureModule,
   ],
 })
 class MainAppModule {}
 
-async function createApplication() {
+export async function createApplication() {
   return await NestFactory.create(MainAppModule);
 }

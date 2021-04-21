@@ -1,32 +1,18 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
-import {
-  Auth0OidcAuthOptions,
-  OIDCAuthOptionsFactory,
-  OIDCModuleAsyncAuthOptions,
-} from '../interfaces/auth0-oidc-module-options.interface';
+import { OIDCAuthOptionsFactory, OIDCModuleAsyncAuthOptions } from '../interfaces/auth0-oidc-module-options.interface';
+import { OIDCAuthMiddlewareProvider } from '../providers/oidc-auth-middleware.provider';
 import { OidcRequestContextProvider } from '../providers/oidc-request-context.provider';
 
-@Module({})
+@Module({
+  providers: [OidcRequestContextProvider, OIDCAuthMiddlewareProvider],
+  exports: [OidcRequestContextProvider, OIDCAuthMiddlewareProvider],
+})
 export class OpenIdConnectCoreFeatureModule {
-  public static forFeature(options: Auth0OidcAuthOptions): DynamicModule {
-    return {
-      module: OpenIdConnectCoreFeatureModule,
-      providers: [
-        {
-          provide: 'OIDC_AUTH_OPTIONS',
-          useValue: options,
-        },
-        OidcRequestContextProvider,
-      ],
-      exports: [OidcRequestContextProvider],
-    };
-  }
-
   public static forFeatureAsync(options: OIDCModuleAsyncAuthOptions): DynamicModule {
     return {
       module: OpenIdConnectCoreFeatureModule,
       imports: options.imports || [],
-      providers: [...this.createAsyncProviders(options)],
+      providers: [...this.createAsyncProviders(options), OidcRequestContextProvider],
       exports: [],
     };
   }
