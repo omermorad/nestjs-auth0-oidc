@@ -23,7 +23,7 @@ class SomeController {
 
 @Module({
   imports: [
-    Auth0OpenidConnectModule.forFeature({
+    Auth0OpenidConnectModule.register({
       authRequired: false,
     }),
   ],

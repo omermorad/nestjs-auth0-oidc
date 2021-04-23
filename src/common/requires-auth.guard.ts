@@ -1,7 +1,5 @@
-import { CanActivate, ExecutionContext, Injectable, UseGuards, mixin } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { CanActivate, ExecutionContext, UseGuards } from '@nestjs/common';
 import { OpenidRequest, requiresAuth } from 'express-openid-connect';
-import { ROLES_KEY } from './required-scopes.decorator';
 
 export function RequiresAuth(requiresLoginCheck?: (req: OpenidRequest) => boolean): MethodDecorator & ClassDecorator {
   class RequiresAuthGuard implements CanActivate {

@@ -5,7 +5,7 @@ import { Auth0OidcAuthMiddleware } from 'src/middleware/auth0-oidc-auth.middlewa
 
 @Module({
   imports: [
-    Auth0OpenidConnectModule.registerAsync({
+    Auth0OpenidConnectModule.forRootAsync({
       useClass: Auth0ConfigService,
     }),
   ],

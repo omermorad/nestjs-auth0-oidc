@@ -15,8 +15,6 @@ class SomeController {
 
   @Get('/profile')
   public getProfile() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
     return `hello ${this.oidc.user.sub}`;
   }
 
@@ -49,7 +47,7 @@ class Auth0ConfigOptions {
 
 @Module({
   imports: [
-    Auth0OpenidConnectModule.forFeatureAsync({
+    Auth0OpenidConnectModule.registerAsync({
       useClass: Auth0ConfigOptions,
     }),
   ],

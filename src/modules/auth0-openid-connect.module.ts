@@ -10,24 +10,27 @@ import {
   OIDCModuleAsyncAuthOptions,
 } from '../interfaces/auth0-oidc-module-options.interface';
 
-@Module({})
-// @Global()
+@Global()
+@Module({
+  providers: [OidcRequestContextProvider, OIDCAuthMiddlewareProvider],
+  exports: [OidcRequestContextProvider, OIDCAuthMiddlewareProvider],
+})
 export class Auth0OpenidConnectModule {
-  public static register(options: Auth0OidcBaseOptions): DynamicModule {
+  public static forRoot(options: Auth0OidcBaseOptions): DynamicModule {
     return {
       module: Auth0OpenidConnectModule,
       imports: [OpenIdConnectCoreRootModule.register(options)],
     };
   }
 
-  public static registerAsync(options: OIDCModuleAsyncBaseOptions): DynamicModule {
+  public static forRootAsync(options: OIDCModuleAsyncBaseOptions): DynamicModule {
     return {
       module: Auth0OpenidConnectModule,
       imports: [OpenIdConnectCoreRootModule.registerAsync(options)],
     };
   }
 
-  public static forFeature(options: Auth0OidcAuthOptions): DynamicModule {
+  public static register(options: Auth0OidcAuthOptions): DynamicModule {
     const providers = [
       {
         provide: 'OIDC_AUTH_OPTIONS',
@@ -44,7 +47,7 @@ export class Auth0OpenidConnectModule {
     };
   }
 
-  public static forFeatureAsync(options: OIDCModuleAsyncAuthOptions): DynamicModule {
+  public static registerAsync(options: OIDCModuleAsyncAuthOptions): DynamicModule {
     return {
       module: Auth0OpenidConnectModule,
       imports: [OpenIdConnectCoreFeatureModule.forFeatureAsync(options)],

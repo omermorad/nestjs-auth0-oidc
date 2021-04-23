@@ -4,3 +4,6 @@ export * from './interfaces/auth0-oidc-module-options.interface';
 export * from './middleware/auth0-oidc-auth.middleware';
 export * from './types/auth0-oidc-types';
 export * from './common/requires-auth.guard';
+export * from './common/oidc-auth-base-module';
+export * from './common/setup-oidc-auth';
+export * from './common/const-tokens';

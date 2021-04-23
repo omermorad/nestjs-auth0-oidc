@@ -27,7 +27,6 @@
   "readme": "https://github.com/omermorad/nestjs-auth0-oidc/README.md",
   "scripts": {
     "example": "node -r ts-node/register ./samples/run-sample.ts",
-    "basic": "npm run example -- basic",
     "prebuild": "./node_modules/.bin/rimraf dist",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
@@ -44,6 +43,7 @@
     "README.md"
   ],
   "dependencies": {
+    "@nestjs/common": "^7.6.15",
     "@nestjs/platform-express": "^7.6.15",
     "express-openid-connect": "^2.3.1",
     "get-port": "^5.1.1",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@nestjs/common": "^7.6.1",
+    "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.6.1",
     "@nestjs/testing": "^7.6.3",
     "@semantic-release/changelog": "^5.0.1",

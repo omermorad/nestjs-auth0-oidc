@@ -1,10 +1,10 @@
-import { Controller, Get, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { RequestContext } from 'express-openid-connect';
+import { Controller, Get, Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { InjectOidcCtx, Auth0OpenidConnectModule, Auth0OidcAuthMiddleware } from '../src';
+import { RequestContext } from 'express-openid-connect';
+import { Auth0OpenidConnectModule, InjectOidcCtx, setupOidcAuth } from '../src';
 
 @Controller('/')
-class SomeController {
+class AppController {
   public constructor(@InjectOidcCtx() private readonly oidc: RequestContext) {}
 
   @Get('/')
@@ -15,39 +15,18 @@ class SomeController {
 
 @Module({
   imports: [
-    Auth0OpenidConnectModule.forFeature({
+    Auth0OpenidConnectModule.register({
       idpLogout: true,
     }),
   ],
-  controllers: [SomeController],
-})
-class FeatureModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Auth0OidcAuthMiddleware).exclude('login', 'logout').forRoutes('*');
-  }
-}
-
-/*
- * You can use the `register` method if you want to add the basic required fields
- * of Auth0 SDK NOT from the environment variables
- * If you'll leave this one empty, it will automatically try to pull this fields
- * from the environment variables, read the documentation for more details:
- * https://github.com/auth0/express-openid-connect#documentation
- */
-@Module({
-  imports: [
-    // Auth0OpenidConnectModule.register({
-    //   baseURL: '',
-    //   secret: '',
-    //   issuerBaseURL: '',
-    //   clientID: '',
-    // }),
-    Auth0OpenidConnectModule,
-    FeatureModule,
-  ],
+  controllers: [AppController],
 })
 class MainAppModule {}
 
 export async function createApplication() {
-  return await NestFactory.create(MainAppModule);
+  const app = await NestFactory.create(MainAppModule);
+
+  setupOidcAuth(app);
+
+  return app;
 }
