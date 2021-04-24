@@ -1,14 +1,8 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { OIDCAuthMiddlewareProvider } from '../providers/oidc-auth-middleware.provider';
 import { OidcRequestContextProvider } from '../providers/oidc-request-context.provider';
-import { OpenIdConnectCoreFeatureModule } from './open-id-connect-core-feature.module';
-import { OpenIdConnectCoreRootModule } from './open-id-connect-core-root.module';
-import {
-  Auth0OidcBaseOptions,
-  Auth0OidcAuthOptions,
-  OIDCModuleAsyncBaseOptions,
-  OIDCModuleAsyncAuthOptions,
-} from '../interfaces/auth0-oidc-module-options.interface';
+import { Auth0OidcAuthOptions, OIDCModuleAsyncOptions } from '../interfaces/auth0-oidc-module-options.interface';
+import { OpenIdConnectCoreModule } from './open-id-connect-core.module';
 
 @Global()
 @Module({
@@ -16,20 +10,6 @@ import {
   exports: [OidcRequestContextProvider, OIDCAuthMiddlewareProvider],
 })
 export class Auth0OpenidConnectModule {
-  public static forRoot(options: Auth0OidcBaseOptions): DynamicModule {
-    return {
-      module: Auth0OpenidConnectModule,
-      imports: [OpenIdConnectCoreRootModule.register(options)],
-    };
-  }
-
-  public static forRootAsync(options: OIDCModuleAsyncBaseOptions): DynamicModule {
-    return {
-      module: Auth0OpenidConnectModule,
-      imports: [OpenIdConnectCoreRootModule.registerAsync(options)],
-    };
-  }
-
   public static register(options: Auth0OidcAuthOptions): DynamicModule {
     const providers = [
       {
@@ -47,10 +27,10 @@ export class Auth0OpenidConnectModule {
     };
   }
 
-  public static registerAsync(options: OIDCModuleAsyncAuthOptions): DynamicModule {
+  public static registerAsync(options: OIDCModuleAsyncOptions): DynamicModule {
     return {
       module: Auth0OpenidConnectModule,
-      imports: [OpenIdConnectCoreFeatureModule.forFeatureAsync(options)],
+      imports: [OpenIdConnectCoreModule.registerAsync(options)],
     };
   }
 }

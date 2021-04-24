@@ -1,7 +1,7 @@
 import { RequestContext } from 'express-openid-connect';
 import { NestFactory } from '@nestjs/core';
 import { Controller, Get, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { Auth0OpenidConnectModule, Auth0OidcAuthMiddleware, InjectOidcCtx, RequiresAuth } from '../src';
+import { Auth0OpenidConnectModule, Auth0OidcAuthMiddleware, InjectOidcCtx } from '../src';
 
 @Controller('/')
 class SomeController {
@@ -15,8 +15,6 @@ class SomeController {
   @Get('/admin')
   @RequiresAuth()
   public admin(): string {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
     return `Hello ${this.oidc.user.sub}, this is the admin section.`;
   }
 }

@@ -7,13 +7,11 @@ import { Auth0OidcBaseOptions, Auth0OidcAuthOptions } from 'src/interfaces/auth0
 export class Auth0OidcAuthMiddleware implements NestMiddleware {
   public constructor(
     @Inject('AUTH_MIDDLEWARE') private readonly middleware: Auth0AuthMiddlware,
-    @Optional() @Inject('OIDC_BASE_OPTIONS') private readonly baseOptions: Auth0OidcBaseOptions,
     @Inject('OIDC_AUTH_OPTIONS') private readonly options: Auth0OidcAuthOptions
   ) {}
 
   public use(req: Request, res: Response, next: () => void): any {
     this.middleware({
-      ...this.baseOptions,
       ...this.options,
     })(req, res, next);
   }

@@ -1,11 +1,18 @@
-import { Controller, Get, MiddlewareConsumer, Module, NestModule, Res } from '@nestjs/common';
-import { InjectOidcCtx, Auth0OpenidConnectModule, Auth0OidcAuthMiddleware } from '../src';
+import { Controller, Get, Module, Res, UseGuards } from '@nestjs/common';
+import {
+  InjectOidcCtx,
+  Auth0OpenidConnectModule,
+  Auth0OidcAuthOptions,
+  setupOidcAuth,
+  OIDCAuthOptionsFactory,
+  RequiresAuth,
+} from '../src';
 import { RequestContext } from 'express-openid-connect';
 import { NestFactory } from '@nestjs/core';
 import { Response } from 'express';
 
 @Controller('/')
-class SomeController {
+class FeatureController {
   public constructor(@InjectOidcCtx() private readonly oidc: RequestContext) {}
 
   @Get('/')
@@ -14,6 +21,7 @@ class SomeController {
   }
 
   @Get('/profile')
+  @UseGuards(RequiresAuth)
   public getProfile() {
     return `hello ${this.oidc.user.sub}`;
   }
@@ -29,41 +37,37 @@ class SomeController {
   }
 }
 
-class Auth0ConfigOptions {
-  createSomething() {
+class Auth0ConfigOptions implements OIDCAuthOptionsFactory {
+  createOidcAuthOptions(): Auth0OidcAuthOptions {
     return {
       idpLogout: true,
       authRequired: false,
       routes: {
-        // Pass custom options to the login method by overriding the default login route
         login: false,
-        // Pass a custom path to the postLogoutRedirect to redirect users to a different
-        // path after login, this should be registered on your authorization server.
         postLogoutRedirect: '/custom-logout',
       },
     };
   }
 }
 
+@Module({})
+class FeatureModule {}
+
 @Module({
   imports: [
+    FeatureModule,
     Auth0OpenidConnectModule.registerAsync({
       useClass: Auth0ConfigOptions,
     }),
   ],
-  providers: [SomeController],
-})
-class FeatureModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Auth0OidcAuthMiddleware).forRoutes('*');
-  }
-}
-
-@Module({
-  imports: [Auth0OpenidConnectModule, FeatureModule],
+  controllers: [FeatureController],
 })
 class MainAppModule {}
 
-async function createApplication() {
-  return await NestFactory.create(MainAppModule);
+export async function createApplication() {
+  const app = await NestFactory.create(MainAppModule);
+
+  setupOidcAuth(app);
+
+  return app;
 }

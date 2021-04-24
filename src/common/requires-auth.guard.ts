@@ -1,17 +1,9 @@
-import { CanActivate, ExecutionContext, UseGuards } from '@nestjs/common';
-import { OpenidRequest, requiresAuth } from 'express-openid-connect';
+import { CanActivate, ExecutionContext } from '@nestjs/common';
 
-export function RequiresAuth(requiresLoginCheck?: (req: OpenidRequest) => boolean): MethodDecorator & ClassDecorator {
-  class RequiresAuthGuard implements CanActivate {
-    public canActivate(context: ExecutionContext) {
-      const req = context.switchToHttp().getRequest();
-      const res = context.switchToHttp().getRequest();
-      const next = context.switchToHttp().getNext()();
+export class RequiresAuth implements CanActivate {
+  public async canActivate(context: ExecutionContext) {
+    const req = context.switchToHttp().getRequest();
 
-      requiresAuth(requiresLoginCheck)(req, res, next);
-      return true;
-    }
+    return req.oidc.isAuthenticated();
   }
-
-  return UseGuards(RequiresAuthGuard);
 }

@@ -27,6 +27,7 @@
   "readme": "https://github.com/omermorad/nestjs-auth0-oidc/README.md",
   "scripts": {
     "example": "node -r ts-node/register ./samples/run-sample.ts",
+    "sample": "npm run example -- custom-routes",
     "prebuild": "./node_modules/.bin/rimraf dist",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
