@@ -18,7 +18,7 @@
 
 ## Table Of Contents
 - [Installation](#installation)
-- [Fully Working Example](#fully-working-example)
+- [Fully Working Example](#fully-working-examples)
 - [What is this package?](#what-is-this-package?)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
@@ -32,8 +32,11 @@ npm i nestjs-auth0-oidc express-openid-connect
 
 Notice that `express-openid-connect` is a peer dependency
 
-## Fully Working Example
-[See the fully working end-to-end examples of NestJS and Auth0 Open ID Connect](https://github.com/omermorad//tree/master/samples)
+## Fully Working Examples
+You can browse full end-to-end working examples of NestJS and Auth0 Open ID Connect [in the docs section](https://github.com/omermorad//tree/master/samples) \
+You can also [navigate to the samples folder]() where there are a few samples
+of the different options that Auth0 suggest in their SDK.
+
 
 ## What is this package?
 
@@ -45,8 +48,9 @@ This package enables you to use `express-openid-connect` (hereinafter: 'oidc') i
 It supports the Auth0 OpenID Connect middleware(s) and suggests a built in use of required scopes using guards.
 
 #### What about `passport-auth0`?
-According to Auth0, nothing is going to happen with it. But they **do recommend** to use
-`express-openid-connect` SDK if you are creating a new project.
+According to Auth0, nothing is going to happen with `passport-auth0`.
+But they **do recommend** to use `express-openid-connect` SDK if you are
+creating a new project.
 
 From Auth0 official announcement: \
 **_We recommend considering using `express-openid-connect`, as it will be our target for all innovation for web sign-in on the Node.js platform for the foreseeable future._**
