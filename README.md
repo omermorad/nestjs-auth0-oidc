@@ -12,7 +12,7 @@
   </h3>
 
   <p align="center">
-    <strong>Just a Nice Wrapper for Auth0 'express-openid-connect' npm package</strong>
+    <strong>Just a Nice Wrapper for Auth0 `express-openid-connect` npm package</strong>
   </p>
 </p>
 
